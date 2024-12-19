@@ -1,0 +1,7 @@
+packages: .
+
+package *
+  extra-include-dirs: /opt/homebrew/Cellar/glpk/5.0/include
+  extra-lib-dirs:/opt/homebrew/Cellar/glpk/5.0/lib
+
+allow-newer: vector

@@ -1,0 +1,3 @@
+0.3.2.3, 2018/11/13:
+	* Update dependencies
+	* Add caveat about potential segfaults and speed problems.

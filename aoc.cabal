@@ -1,0 +1,128 @@
+cabal-version: 3.6
+name: aoc24
+version: 0
+
+common aoc
+  ghc-options: -Wall -O2 -threaded -rtsopts -with-rtsopts=-N12
+  default-language: GHC2024
+  default-extensions:
+  build-depends:
+    , base
+    , text >= 2.1.2
+    , bytestring
+    , bytestring-trie
+    , regex-tdfa
+    , attoparsec
+    , containers
+    , array
+    , split
+    , unordered-containers
+    , async
+    , parallel
+    , linear
+    , hashable
+    , pqueue
+    , astar
+    , mtl
+
+executable aoc1
+  import: aoc
+  main-is: aoc1.hs
+
+executable aoc2
+  import: aoc
+  main-is: aoc2.hs
+
+executable aoc3
+  import: aoc
+  main-is: aoc3.hs
+
+executable aoc4
+  import: aoc
+  main-is: aoc4.hs
+
+executable aoc5
+  import: aoc
+  main-is: aoc5.hs
+
+executable aoc6
+  import: aoc
+  main-is: aoc6.hs
+
+executable aoc7
+  import: aoc
+  main-is: aoc7.hs
+
+executable aoc8
+  import: aoc
+  main-is: aoc8.hs
+
+executable aoc9
+  import: aoc
+  main-is: aoc9.hs
+
+executable aoc10
+  import: aoc
+  main-is: aoc10.hs
+
+executable aoc11
+  import: aoc
+  main-is: aoc11.hs
+
+executable aoc12
+  import: aoc
+  main-is: aoc12.hs
+  other-modules:
+    , UnionFind
+
+executable aoc13
+  import: aoc
+  main-is: aoc13.hs
+
+executable aoc14
+  import: aoc
+  main-is: aoc14.hs
+
+executable aoc15
+  import: aoc
+  main-is: aoc15.hs
+
+executable aoc16
+  import: aoc
+  main-is: aoc16.hs
+
+executable aoc17
+  import: aoc
+  main-is: aoc17.hs
+
+executable aoc18
+  import: aoc
+  main-is: aoc18.hs
+
+executable aoc19
+  import: aoc
+  main-is: aoc19.hs
+
+executable aoc20
+  import: aoc
+  main-is: aoc20.hs
+
+executable aoc21
+  import: aoc
+  main-is: aoc21.hs
+
+executable aoc22
+  import: aoc
+  main-is: aoc22.hs
+
+executable aoc23
+  import: aoc
+  main-is: aoc23.hs
+
+executable aoc24
+  import: aoc
+  main-is: aoc24.hs
+
+executable aoc25
+  import: aoc
+  main-is: aoc25.hs
