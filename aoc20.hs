@@ -1,53 +1,17 @@
-{-# LANGUAGE TupleSections #-}
-import qualified Data.Map as Map
-import Data.List.Split (splitOn)
-import Data.Bifunctor (bimap)
-import Data.Containers.ListUtils (nubOrdOn)
+import qualified Data.HashSet as S
+import Data.Graph.AStar (aStar)
+import Data.List (findIndex, elemIndex)
+import Data.Maybe (fromMaybe, fromJust)
 
 main :: IO ()
-main = interact (show . val . map parse . lines)
+main = interact (show . val . lines)
 
-newtype Machine = M { run :: (String, Bool) -> (Machine, Maybe Bool) }
-
-broadcaster :: Machine
-broadcaster = M $ \(_, b) -> (broadcaster, Just b)
-
-flipFlop :: Machine
-flipFlop = go False
+val :: [[Char]] -> Int
+val m = length $ [ () | (i0, (x0, y0)) <- path, (i1, (x1, y1)) <- drop (i0 + 100) path, let l = abs (x1 - x0) + abs (y1 - y0), l <= 20, i1 - i0 - l >= 100]
   where
-    go mem = M $ \(_, b) -> if b then (go mem, Nothing) else (go (not mem), Just (not mem))
+    path = zip [0..] $ ((sx,sy):) $ fromJust $ aStar neighbors (\_ _ -> 1) (\_ -> 0) (\(x, y) -> m !! y !! x == 'E') (sx, sy)
+    sy = fromMaybe (-1) $ findIndex (elem 'S') m
+    sx = fromMaybe (-1) $ elemIndex 'S' (m !! sy)
+    neighbors (x, y) = S.fromList [(x', y') | (dx, dy) <- [(0, 1), (0, -1), (1, 0), (-1, 0)],
+      let x' = x + dx, let y' = y + dy, m !! y' !! x' /= '#']
 
-conj :: Int -> Machine
-conj size = go Map.empty
-  where
-    go mem = M $ \(nm, b) ->
-      let mem' = Map.insert nm b mem
-      in (go mem', Just $ not (Map.size mem' == size && and (Map.elems mem')))
-
-parse :: String -> (String, [String])
-parse s = (nm, outputs)
-  where
-    [nm, outs] = splitOn " -> " s
-    outputs = splitOn ", " outs
-
-val :: [(String, [String])] -> Int
-val inps = foldr (lcm . snd) 1 $ take (length targetInps) $ nubOrdOn fst $ go 0 machines0 (0, 0) []
-  where
-    (machines0, outputs) = bimap Map.fromList Map.fromList $ unzip $ map mkMachine inps
-    mkMachine (nm, outs) = case nm of
-      ('%':nm') -> ((nm', flipFlop), (nm', outs))
-      ('&':nm') -> ((nm', conj (length (findInputs nm'))), (nm', outs))
-      _ -> ((nm, broadcaster), (nm, outs))
-    target = head (findInputs "rx")
-    targetInps = findInputs target
-    findInputs tgt = map (tail . fst) . filter (elem tgt . snd) $ inps
-
-    go n machines lh [] = go (n + 1) machines lh [("button", False, "broadcaster")]
-    go n machines (los, his) ((from, b, to):msgs) =
-        (if to == target && b then ((from, n):) else id)
-        $ go n machines' (los + fromEnum (not b), his + fromEnum b) (msgs ++ msgs')
-      where
-        (machines', msgs') = maybe
-          (machines, [])
-          (bimap (\m -> Map.insert to m machines) (maybe [] (\b' -> map (to, b',) (outputs Map.! to))) . (`run` (from, b)))
-          (Map.lookup to machines)
