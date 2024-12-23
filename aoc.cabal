@@ -9,8 +9,6 @@ common aoc
   build-depends:
     , base
     , text >= 2.1.2
-    , bytestring
-    , bytestring-trie
     , regex-tdfa
     , attoparsec
     , containers
@@ -24,6 +22,7 @@ common aoc
     , pqueue
     , astar
     , mtl
+    , maximal-cliques
 
 executable aoc1
   import: aoc
