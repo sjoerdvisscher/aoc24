@@ -23,6 +23,7 @@ common aoc
     , astar
     , mtl
     , maximal-cliques
+    , deepseq
 
 executable aoc1
   import: aoc
